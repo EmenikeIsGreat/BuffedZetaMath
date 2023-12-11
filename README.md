@@ -3,8 +3,8 @@ Team Members:
    Emenike Anigbogu (118447995)
 
 App Description:
-  Our App is a speed math game which allows you to test your math skills. 
-  You will create a username and password and then start the game where you'll have 120 seconds to answer quick math questions.
+  Our App is a speed math game that allows you to test your math skills. 
+  You will create a username and password and then start the game where you'll have 120 seconds to answer quick math questions, try to beat our leaderboard.
 
 API links - 
   https://api.api-ninjas.com/v1/babynames from https://api-ninjas.com
