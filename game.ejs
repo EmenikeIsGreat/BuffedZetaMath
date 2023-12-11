@@ -90,7 +90,7 @@ a:active {
     width: 180px;
   }
 
-#display {
+#API_display {
     text-align: center;
 }
   
@@ -108,7 +108,7 @@ a:active {
         </div>
         
         <div class='banner'>
-          <div class='start'>
+          <div class='start' id="start">
             <span class='problem'></span>
             =
             <input class='answer'>
@@ -124,7 +124,7 @@ a:active {
           </div>
         </div>
       </div>
-    <div id="display"></div>
+    <div id="API_display"></div>
      <script>
         async function getApiAndFadeIn() {
             let randomNumber = Math.floor(Math.random() * 100) + 1; // Generates a random number between 1 and 100
@@ -133,7 +133,7 @@ a:active {
             fadeInAndDisplay(data);
         }
        function fadeInAndDisplay(data) {
-           let display = document.getElementById("display");
+           let display = document.getElementById("API_display");
            display.innerHTML = data;
            display.style.display = "none";
            let opacity = 0;
@@ -227,13 +227,13 @@ a:active {
             if (timeLeft <= 0) {
                 
                 clearInterval(countdownInterval);
-                let gameContent = document.querySelector(".start");
+                let gameContent = document.getElementById("start");
                 gameContent.innerHTML = "<div id='display' style='display: flex; flex-direction: column; align-items: center; justify-content: center;'><h1>Final Score: " + score + "</h1><button id='playAgainButton'>Play Again</button></div>"; // Display the final score and the "Play Again" button in the middle of the screen
 
                 document.getElementById('playAgainButton').addEventListener('click', function() {
                     res = generateProblems()
                     document.querySelector(".correct").textContent = "Score: 0";
-                    timeLeft = 2
+                    timeLeft = 120
                     console.log('Play Again button clicked');
                     let gameContent = document.querySelector(".start");
                     gameContent.innerHTML = "<span class='problem'></span> = <input class='answer'>"; // Display the problem and input field
