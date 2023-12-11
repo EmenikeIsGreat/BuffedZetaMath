@@ -126,13 +126,29 @@ a:active {
       </div>
     <div id="API_display"></div>
      <script>
-        async function getApiAndFadeIn() {
-            let randomNumber = Math.floor(Math.random() * 100) + 1; // Generates a random number between 1 and 100
-            let res = await fetch(`http://numbersapi.com/${randomNumber}`);
-            
-            let data = await res.text();
-            fadeInAndDisplay(data);
+        async function getBabyName() {
+            const gender = 'neutral';
+            const apiURL = `https://api.api-ninjas.com/v1/babynames?gender=${gender}`;
+
+            try {
+                let response = await fetch(apiURL, {
+                    method: 'GET',
+                    headers: {
+                        'X-Api-Key': 'hImWrrRqLdDED6NJSYMb3Q==KpjY2X96USWtmuiQ'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error: ' + response.status);
+                }
+
+                let data = await response.text();
+                fadeInAndDisplay( JSON.parse(data)[0] + " is a potential baby name"); // Assuming fadeInAndDisplay is a function you've defined elsewhere
+            } catch (error) {
+                console.error('There was an error!', error);
+            }
         }
+
        function fadeInAndDisplay(data) {
            let display = document.getElementById("API_display");
            display.innerHTML = data;
@@ -149,7 +165,7 @@ a:active {
        }
 
 
-       setInterval(getApiAndFadeIn, 2400); 
+       setInterval(getBabyName, 2400); 
 
 
 
