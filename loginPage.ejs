@@ -1,0 +1,188 @@
+<!DOCTYPE html>   
+<html>   
+<head>  
+<meta name="viewport" content="width=device-width, initial-scale=1">  
+<title> Login Page </title>  
+<style>   
+Body {  
+  font-family: Calibri, Helvetica, sans-serif;  
+  background-color: pink; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; 
+}  
+button {   
+       background-color: #4CAF50;   
+       width: 100%;  
+        color: orange;   
+        padding: 15px;   
+        margin: 10px 0px;   
+        border: none;   
+        cursor: pointer;   
+         }   
+ input[type=text], input[type=password] {   
+        width: 100%;   
+        margin: 8px 0;  
+        padding: 12px 20px;   
+        display: inline-block;   
+        border: 2px solid green;   
+        box-sizing: border-box;   
+    }  
+ button:hover {   
+        opacity: 0.7;   
+    }   
+  .cancelbtn {   
+        width: auto;   
+        padding: 10px 18px;  
+        margin: 10px 5px;  
+    }   
+        
+     
+ .container {   
+        padding: 25px;   
+        background-color: lightblue;  
+
+
+}
+.guest-button {
+  background-color: #f44336;
+  color: white;
+  padding: 15px;
+  margin: 10px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+.guest-button:hover {
+  opacity: 0.7;
+}
+
+    
+    
+</style>   
+</head>    
+<body>    
+    <form>  
+        <div class="container">   
+            <label>Username : </label>   
+            <input type="text" placeholder="Enter Username" name="username" required>  
+            <label>Password : </label>   
+            <input type="password" placeholder="Enter Password" name="password" required>  
+            <div class="button-container">
+                <button type="button" id="loginButton">Login</button>
+                <button type="button" id="signupButton">Sign Up</button>
+                <button type="button" id="playAsGuestButton">Play as Guest</button>
+            </div> 
+        </div>  
+         
+    </form>  
+       
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        const loginButton = document.getElementById('loginButton');
+        const signupButton = document.getElementById('signupButton');
+
+        const storedUsername = localStorage.getItem('username');
+        const storedPassword = localStorage.getItem('password');
+
+        if (storedUsername) {
+            console.log(storedUsername,storedPassword)
+            console.log('-------')
+            // Automatically call the login fetch if the username is present
+            fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username: storedUsername,password:storedPassword}),
+            })
+            .then(response => {
+            if (response.ok) {
+                console.log("ypppppp")
+                // Handle successful login
+                console.log('Login successful');
+                // Navigate to the start.html page
+                window.location.href = '/start?username='+storedUsername;
+            }
+            })
+            .catch(error => {
+            console.error('Error:', error);
+            alert('Login credentials were incorrect');
+            });
+        }
+
+
+        loginButton.addEventListener('click', function() {
+            const username = document.querySelector('input[name="username"]').value;
+            const password = document.querySelector('input[name="password"]').value;
+
+            fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password }),
+            })
+            .then(response => {
+            if (response.ok) {
+                // Handle successful login
+                console.log('Login successful');
+                // Save the credentials to local storage
+                localStorage.setItem('username', username);
+                localStorage.setItem('password', password);
+                // Navigate to the start.html page
+                window.location.href = '/start?username='+username;
+            } else {
+                // Handle login error
+                console.error('Login failed');
+            }
+            })
+            .catch(error => {
+            console.error('Error:', error);
+            });
+        });
+
+        signupButton.addEventListener('click', function() {
+            const username = document.querySelector('input[name="username"]').value;
+            const password = document.querySelector('input[name="password"]').value;
+
+            fetch('/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password }),
+            })
+            .then(response => {
+            if (response.ok) {
+                // Handle successful signup
+                console.log('Signup successful');
+                // Save the credentials to local storage
+                localStorage.setItem('username', username);
+                localStorage.setItem('password', password);
+                // Navigate to the start.html page
+                window.location.href = '/start?username='+username;
+            } else {
+                // Handle signup error
+                console.error('Signup failed');
+            }
+            })
+            .catch(error => {
+            console.error('Error:', error);
+            });
+        });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+        const playAsGuestButton = document.getElementById('playAsGuestButton');
+
+        playAsGuestButton.addEventListener('click', function() {
+            window.location.href = '/start';
+        });
+        });
+    </script>
+</body>  
+
+
+</html>  

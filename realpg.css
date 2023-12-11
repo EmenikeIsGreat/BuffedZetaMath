@@ -1,0 +1,70 @@
+body {
+    font: 14px "Inter", Georgia, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #cb5b5b;
+  }
+
+a:link{
+    color:antiquewhite;
+  }
+
+a:hover{
+    color: rosybrown;
+  }
+
+a:active {
+    color: #0044cc;
+  }
+  
+  #game {
+    min-height: 300px;
+  }
+  #game span.left,
+  #game span.correct {
+    font-size: 22px;
+    position: absolute;
+    top: 20px;
+  }
+  #game span.left {
+    left: 10px;
+  }
+  #game span.correct {
+    right: 10px;
+  }
+  #game .banner {
+    text-align: center;
+    margin-top: 240px;
+    padding: 10px 0;
+    line-height: 54px;
+    font-size: 36px;
+  }
+  #game .banner .end {
+    display: none;
+  }
+  #game .banner p {
+    font-size: 19px;
+    line-height: 24px;
+    margin: 0;
+  }
+  #game .banner p.correct {
+    font-size: 40px;
+    line-height: 59px;
+  }
+  #game .banner.wide {
+    height: auto;
+  }
+  #game .banner input {
+    font-size: 36px;
+    font-family: inherit;
+    width: 180px;
+  }
+
+#display {
+    text-align: center;
+}
+  
+
+  
+  
+  

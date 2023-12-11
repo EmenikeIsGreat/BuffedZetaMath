@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed Math Game – Online Speed Drill</title>
+    <link href='realpg.css' rel='stylesheet'>
+    <style>
+        .countdown {
+            display: inline-block;
+            font-size: 24px;
+            margin-left: 10px;
+        }
+        /* body {
+            background: linear-gradient(to right, #000000, #ffffff);
+        } */
+        #playAgainButton {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        }
+
+        #playAgainButton:hover {
+        background-color: #45a049;
+        }
+        body {
+    font: 14px "Inter", Georgia, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #cb5b5b;
+  }
+
+a:link{
+    color:antiquewhite;
+  }
+
+a:hover{
+    color: rosybrown;
+  }
+
+a:active {
+    color: #0044cc;
+  }
+  
+  #game {
+    min-height: 300px;
+  }
+  #game span.left,
+  #game span.correct {
+    font-size: 22px;
+    position: absolute;
+    top: 20px;
+  }
+  #game span.left {
+    left: 10px;
+  }
+  #game span.correct {
+    right: 10px;
+  }
+  #game .banner {
+    text-align: center;
+    margin-top: 240px;
+    padding: 10px 0;
+    line-height: 54px;
+    font-size: 36px;
+  }
+  #game .banner .end {
+    display: none;
+  }
+  #game .banner p {
+    font-size: 19px;
+    line-height: 24px;
+    margin: 0;
+  }
+  #game .banner p.correct {
+    font-size: 40px;
+    line-height: 59px;
+  }
+  #game .banner.wide {
+    height: auto;
+  }
+  #game .banner input {
+    font-size: 36px;
+    font-family: inherit;
+    width: 180px;
+  }
+
+#display {
+    text-align: center;
+}
+  
+
+  
+  
+  
+    </style>
+</head>
+<body>
+    <div id='game'>
+        <span class='left'>Seconds left:<span class="countdown" id="countdown">120</span></span>
+        <div>
+            <span class='correct'> Score: 0</span>
+        </div>
+        
+        <div class='banner'>
+          <div class='start'>
+            <span class='problem'></span>
+            =
+            <input class='answer'>
+
+          </div>
+
+          <div class='end'>
+            <p class='correct'>Score: 0</p>
+            <p>
+              <a href='/game?key=a7220a92'>Try again</a>
+              or <a href="/">change settings</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    <div id="display"></div>
+     <script>
+        async function getApiAndFadeIn() {
+            let randomNumber = Math.floor(Math.random() * 100) + 1; // Generates a random number between 1 and 100
+            let res = await fetch(`http://numbersapi.com/${randomNumber}`);
+            let data = await res.text();
+            fadeInAndDisplay(data);
+        }
+       function fadeInAndDisplay(data) {
+           let display = document.getElementById("display");
+           display.innerHTML = data;
+           display.style.display = "none";
+           let opacity = 0;
+           let timer = setInterval(function () {
+               if (opacity >= 1) {
+                   clearInterval(timer);
+               }
+               display.style.opacity = opacity;
+               display.style.display = "block";
+               opacity += 0.1;
+           }, 100);
+       }
+
+
+       setInterval(getApiAndFadeIn, 2400); 
+
+
+
+        function generateProblems() {
+        let res = [];
+        for (let i = 0; i < 6000; i++) {
+            let operation = ["+", "-", "*", "/"][Math.floor(Math.random() * 4)];
+            let num1, num2, answ;
+
+            switch (operation) {
+                case "+":
+                    num1 = Math.floor(Math.random() * 99 + 2);
+                    num2 = Math.floor(Math.random() * 99 + 2);
+                    res.push([num1, "+", num2, num1 + num2]);
+                    break;
+                case "-":
+                    num1 = Math.floor(Math.random() * 99 + 2);
+                    num2 = Math.floor(Math.random() * 99 + 2);
+                    answ = Math.random() >= 0.5 ? num1 : num2;
+                    res.push([num1 + num2, "-", num1 + num2 - answ, answ]);
+                    break;
+                case "*":
+                    num1 = Math.floor(Math.random() * 11 + 2);
+                    num2 = Math.floor(Math.random() * 99 + 2);
+                    res.push([num1, "*", num2, num1 * num2]);
+                    break;
+                case "/":
+                    num1 = Math.floor(Math.random() * 11 + 2);
+                    num2 = Math.floor(Math.random() * 99 + 2);
+                    answ = Math.random() >= 0.5 ? num1 : num2;
+                    res.push([num1 * num2, "/", num1, num2]);
+                    break;
+            }
+
+        
+        }
+        return res
+
+    }
+
+    let timeLeft = 120;
+    function startCountdown() {
+
+
+
+        document.getElementById("countdown").innerHTML = timeLeft
+        let score = 0;
+        let isGameRunning = true;
+        let problems = generateProblems()
+        let currentProblem = 0
+        let countdown = document.getElementById('countdown');
+
+        document.querySelector(".correct").textContent = "Score: 0";
+        document.querySelector(".answer").value = "";
+        document.querySelector(".problem").textContent = 
+            problems[currentProblem][0] + " " + problems[currentProblem][1] + " " + problems[currentProblem][2];
+
+        document.querySelector(".answer").addEventListener("keyup", function(e) {
+            console.log(problems[currentProblem][0] + " " + problems[currentProblem][1] + " " + problems[currentProblem][2]  + " " + problems[currentProblem][3]);
+
+            if (parseInt(e.target.value) == problems[currentProblem][3]) {
+                console.log("value " + parseInt(e.target.value))
+                currentProblem++
+                document.querySelector(".problem").textContent = 
+                    problems[currentProblem][0] + " " + problems[currentProblem][1] + " " + problems[currentProblem][2];
+                score++
+                document.querySelector(".answer").value = "";
+                document.querySelector(".correct").textContent = "Score: "+score;
+            }
+        });
+
+    
+        let countdownInterval = setInterval(function() {
+            timeLeft--;
+            countdown.textContent = timeLeft;
+            if (timeLeft <= 0) {
+                
+                clearInterval(countdownInterval);
+                let gameContent = document.querySelector(".start");
+                gameContent.innerHTML = "<div id='display' style='display: flex; flex-direction: column; align-items: center; justify-content: center;'><h1>Final Score: " + score + "</h1><button id='playAgainButton'>Play Again</button></div>"; // Display the final score and the "Play Again" button in the middle of the screen
+
+                document.getElementById('playAgainButton').addEventListener('click', function() {
+                    res = generateProblems()
+                    document.querySelector(".correct").textContent = "Score: 0";
+                    timeLeft = 2
+                    console.log('Play Again button clicked');
+                    let gameContent = document.querySelector(".start");
+                    gameContent.innerHTML = "<span class='problem'></span> = <input class='answer'>"; // Display the problem and input field
+                    currentProblem = 0
+                    document.querySelector(".problem").textContent = 
+                        problems[currentProblem][0] + " " + problems[currentProblem][1] + " " + problems[currentProblem][2];
+                    document.getElementById("countdown").innerHTML = "120"
+                    
+                    startCountdown()
+                });
+                fetch('/updateScore', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username: localStorage.getItem("username"), score: score }),
+                })
+                .then(response => {
+                if (response.ok) {
+                    console.log('Score updated successfully');
+                } else {
+                    console.error('Failed to update score');
+                }
+                })
+                .catch(error => {
+                console.error('Error:', error);
+                });
+            }
+        }, 1000); // 1000ms = 1 second
+}
+
+    startCountdown();
+
+    </script>
+    
+</body>
+</html>
