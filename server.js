@@ -118,6 +118,7 @@ app.post('/login', async (req, res) => {
   // Sign up route
   app.post('/signup', async (req, res) => {
     const { username, password } = req.body;
+
   
     try {
       await client.connect();
@@ -126,10 +127,12 @@ app.post('/login', async (req, res) => {
       const existingUser = await collection.findOne({ username });
   
       if (existingUser) {
+        console.log("yoooo")
         res.status(409).send('Username already exists');
       } else {
         let highScore = 0;
         await collection.insertOne({ username, password, highScore });
+        res.send(true);
           }
     } finally {
       await client.close();
